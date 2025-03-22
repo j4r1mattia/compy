@@ -1,6 +1,7 @@
 import unittest
 
-from lexer import Lexer
+from lexer import Lexer as LexerBasic
+from lexer_tt import Lexer as LexerTT
 
 class TestLexer(unittest.TestCase):
     def test_lexer(self):
@@ -14,10 +15,8 @@ class TestLexer(unittest.TestCase):
                 y = 0
             }
             """
-        lexer = Lexer(source_code=source_code)
-        lexer.tokenize()
-        tokens = lexer.tokens
-        self.assertEqual(tokens, [
+        
+        expected = [
             ('IDENTIFIER', 'x', 1),
             ('ASSIGN', '=', 1),
             ('NUMBER', '5', 1),
@@ -40,4 +39,14 @@ class TestLexer(unittest.TestCase):
             ('ASSIGN', '=', 6),
             ('NUMBER', '0', 6),
             ('RBRACE', '}', 7)
-        ])
+        ]
+
+        lexer = LexerBasic(source_code=source_code)
+        lexer.tokenize()
+        tokens = lexer.tokens
+        self.assertEqual(tokens, expected)
+
+        lexer_tt = LexerTT(source_code=source_code)
+        lexer_tt.tokenize()
+        tokens_tt = lexer_tt.tokens
+        self.assertEqual(tokens_tt, expected)
